@@ -7,37 +7,57 @@ import "../../styles/demo.css";
 
 export const Demo = () => {
 	const { store, actions } = useContext(Context);
+	const [name, setname] = useState("")
+	const [phone, setphone] = useState("")
+	const [email, setemail] = useState("")
+	const [address, setaddress] = useState("")
 
+	useEffect(() => {
+		if (store.temp.length === 0) {
+			console.log("se vacio el componente temporal")
+		} else {
+			setname(store.temp.name)
+			setemail(store.temp.email)
+			setphone(store.temp.phone)
+			setaddress(store.temp.address)
+		}
+	}, [store.temp.name, store.temp.email, store.temp.phone, store.temp.address, store.temp.id])
 	return (
-		<div className="container">
-			<ul className="list-group">
-				{store.demo.map((item, index) => {
-					return (
-						<li
-							key={index}
-							className="list-group-item d-flex justify-content-between"
-							style={{ background: item.background }}>
-							<Link to={"/single/" + index}>
-								<span>Link to: {item.title}</span>
-							</Link>
-							{// Conditional render example
-							// Check to see if the background is orange, if so, display the message
-							item.background === "orange" ? (
-								<p style={{ color: item.initial }}>
-									Check store/flux.js scroll to the actions to see the code
-								</p>
-							) : null}
-							<button className="btn btn-success" onClick={() => actions.changeColor(index, "orange")}>
-								Change Color
-							</button>
-						</li>
-					);
-				})}
-			</ul>
-			<br />
-			<Link to="/">
-				<button className="btn btn-primary">Back home</button>
-			</Link>
-		</div>
+		<>
+
+			<div className="container text-center mt-5 text-start">
+				<h1>Add new contact</h1>
+			</div>
+			<div className="container w-75 text-start">
+				<form>
+					<div className="mb-3">
+						<label htmlFor="inputName" className="form-label">Full Name</label>
+						<input className="form-control" id="inputName" placeholder="Full Name" value={name} onChange={(e) => { (setname(e.target.value)) }} />
+					</div>
+					<div className="mb-3">
+						<label htmlFor="InputEmail" className="form-label">Email address</label>
+						<input className="form-control" id="InputEmail" placeholder="Email address" value={email} onChange={(e) => (setemail(e.target.value))} />
+					</div>
+					<div className="mb-3">
+						<label htmlFor="InputPhone" className="form-label ">Phone</label>
+						<input className="form-control" id="InputPhone" placeholder="Phone" value={phone} onChange={(e) => (setphone(e.target.value))} />
+					</div>
+					<div className="mb-3">
+						<label htmlFor="InputAddress" className="form-label ">Address</label>
+						<input type="Phone" className="form-control" id="InputAddress" placeholder="Address" value={address} onChange={(e) => (setaddress(e.target.value))} />
+					</div>
+					<button className="btn btn-primary w-100" onClick={(e) => { e.preventDefault(); actions.addContact({ name, phone, email, address }); }}>Save</button>
+					<Link to="/">
+						get back to contacts
+					</Link>
+
+				</form>
+			</div>
+		</>
+
 	);
 };
+
+
+
+
